@@ -37,20 +37,20 @@ $holiday_array = array(
 // Create a csv file with payment and bonus days per month. 
 $month_integer = 0;
 foreach ($month_array as $month) {
-	$month_integer ++;
-	// Is the 15th a weekday?
+  $month_integer ++;
+  // Is the 15th a weekday?
   $bonus_date = date('Y'). '-' . $month_integer . '-15';
-	$bonus_date_timestamp = strtotime($bonus_date);
+  $bonus_date_timestamp = strtotime($bonus_date);
   $bonus_day = calculate_bonus_day($bonus_date_timestamp);
 
   $ld = last_day_of_month($month_integer);
   $last_day_of_month = date('Y'). '-' . $month_integer . '-' . last_day_of_month($month_integer);
   $payday = calculate_pay_day(strtotime($last_day_of_month), $holiday_array);
 
-	// Print all information to the file.
+  // Print all information to the file.
   // Not necessary to create a function to write generic columns to a file,
   // because the amount of columns is expected to stay the same for a while.
-	fwrite($myfile, $month . ',' . $bonus_day . ',' . $payday . "\n");
+  fwrite($myfile, $month . ',' . $bonus_day . ',' . $payday . "\n");
 }
 
 fclose($myfile);
@@ -61,11 +61,11 @@ fclose($myfile);
  * @return array
  */
 function get_month_array(){
-	$month_array = array();
-	for ($m=1; $m<=12; $m++) {
-     $month = date('F', mktime(0,0,0,$m, 1, date('Y')));
-     array_push($month_array, $month);
-   }
+  $month_array = array();
+  for ($m=1; $m<=12; $m++) {
+    $month = date('F', mktime(0,0,0,$m, 1, date('Y')));
+    array_push($month_array, $month);
+  }
 
    return $month_array;
 }
@@ -77,11 +77,11 @@ function get_month_array(){
  *
  * @return bool
  */
-function isWeekend($timestamp) {
+function is_weekend($timestamp) {
 	if (date('N', $timestamp) < 6) {
-	  // For the sake of clean coding, I choose to not use a variable to return.
+    // For the sake of clean coding, I choose to not use a variable to return.
     // Instead, I return it straight away.
-		return FALSE;
+      return FALSE;
 	}
   return TRUE;
 }
@@ -96,7 +96,7 @@ function isWeekend($timestamp) {
  * @return false|string
  */
 function calculate_bonus_day($timestamp){
-  $week_day = !isWeekend($timestamp);
+  $week_day = !is_weekend($timestamp);
   // For clean code, initialize the bonus day as the least complicated scenario.
   // That way, the "if" will only be entered when it's necessary.
   $bonus_day = '15';
@@ -114,9 +114,10 @@ function calculate_bonus_day($timestamp){
  *
  * @return int
  */
-function last_day_of_month ($month_int) {
+function last_day_of_month($month_int) {
   // Tried this, didn't work.
-  //return date('t', $timestamp);
+  // return date('t', $timestamp);
+  // All months have 31 days! 
 
   // If the month is February, return 28 if it's not a leap year. Else, return
   // 29.
@@ -150,7 +151,7 @@ function last_day_of_month ($month_int) {
  * @return false|string
  */
 function calculate_pay_day($timestamp, $holiday_array){
-  if (isWeekend($timestamp)) {
+  if (is_weekend($timestamp)) {
     $timestamp = strtotime('last thursday',$timestamp);
   }
 
@@ -199,7 +200,7 @@ function first_weekday_before($date, $holiday_array) {
     $date = date('j-n-Y', $timestamp);
     $holiday = holiday(strtotime($date.'-'  . date('Y')), $holiday_array);
   }
-  while ($holiday != NULL || isWeekend($timestamp));
+  while ($holiday != NULL || is_weekend($timestamp));
 
   return $date;
 }
