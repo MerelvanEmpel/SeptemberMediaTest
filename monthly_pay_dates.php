@@ -51,9 +51,6 @@ foreach ($month_array as $month) {
   // Not necessary to create a function to write generic columns to a file,
   // because the amount of columns is expected to stay the same for a while.
 	fwrite($myfile, $month . ',' . $bonus_day . ',' . $payday . "\n");
-	
-	// TODO:
-	// Create documentation in markdown. 
 }
 
 fclose($myfile);
