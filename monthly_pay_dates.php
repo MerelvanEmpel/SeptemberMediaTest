@@ -19,6 +19,8 @@ fwrite($myfile, "Month,Bonusday,Payday\n");
 
 $month_array = get_month_array();
 
+// I didn't use years here, because most holidays fall on the same date every
+// year.
 $holiday_array = array(
   'nieuwjaarsdag' => '1-1',
   // I didn't use easter_date() because that gives one easter date and we need
@@ -142,8 +144,8 @@ function last_day_of_month($month_int) {
  * Calculates the payday based on the given date.
  * If the given date is a weekday, the alleged payday is the given date.
  * If not, the alleged payday is the last thursday before the given date.
- * If the alleged payday falls in a holliday, it is changed to the first weekday
- * before the holliday.
+ * If the alleged payday falls in a holiday, it is changed to the first weekday
+ * before the holiday.
  *
  * @param $timestamp
  * @param $holiday_array
